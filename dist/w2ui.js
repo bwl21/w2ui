@@ -2709,7 +2709,7 @@ w2utils.event = {
                         if (mitem.count == null && mitem.hotkey == null) colspan++;
                         if (mitem.tooltip == null && mitem.hint != null) mitem.tooltip = mitem.hint; // for backward compatibility
                         menu_html +=
-                            '<tr index="'+ f + '" style="'+ (mitem.style ? mitem.style : '') +'" '+ (mitem.tooltip ? 'title="'+ mitem.tooltip +'"' : '') +
+                            '<tr index="'+ f + '" style="'+ (mitem.style ? mitem.style : '') +'" '+ (mitem.tooltip ? 'title="'+ w2utils.lang(mitem.tooltip) +'"' : '') +
                             '        class="'+ bg +' '+ (options.index === f ? 'w2ui-selected' : '') + ' ' + (mitem.disabled === true ? 'w2ui-disabled' : '') +'"'+
                             '        onmousedown="if ('+ (mitem.disabled === true ? 'true' : 'false') + ') return;'+
                             '               jQuery.fn.w2menuDown(event, \''+ f +'\');"'+
@@ -2717,7 +2717,7 @@ w2utils.event = {
                             '               if ('+ (mitem.disabled === true ? 'true' : 'false') + ') return;'+
                             '               jQuery.fn.w2menuClick(event, \''+ f +'\');">'+
                                 imgd +
-                            '   <td class="menu-text" colspan="'+ colspan +'">'+ txt +'</td>'+
+                            '   <td class="menu-text" colspan="'+ colspan +'">'+ w2utils.lang(txt) +'</td>'+
                             '   <td class="menu-count">'+
                                     (mitem.count != null ? '<span>' + mitem.count + '</span>' : '') +
                                     (mitem.hotkey != null ? '<span class="hotkey">' + mitem.hotkey + '</span>' : '') +
@@ -4742,7 +4742,8 @@ w2utils.event = {
                                         || (search.type == 'percent' && w2utils.isFloat(value)) || (search.type == 'hex' && w2utils.isHex(value))
                                         || (search.type == 'currency' && w2utils.isMoney(value)) || (search.type == 'money' && w2utils.isMoney(value))
                                         || (search.type == 'date' && w2utils.isDate(value)) || (search.type == 'time' && w2utils.isTime(value))
-                                        || (search.type == 'datetime' && w2utils.isDateTime(value))
+                                        || (search.type == 'datetime' && w2utils.isDateTime(value)) || (search.type == 'enum' && w2utils.isAlphaNumeric(value))
+                                        || (search.type == 'list' && w2utils.isAlphaNumeric(value))
                                     ) {
                                     var tmp = {
                                         field    : search.field,
@@ -9650,7 +9651,7 @@ w2utils.event = {
                     (rec_style != '' ? 'custom_style="'+ rec_style +'"' : '') +
                 '>';
             rec_html2 += '<tr id="grid_'+ this.name +'_rec_'+ record.recid +'" recid="'+ record.recid +'" line="'+ lineNum +'" index="'+ ind +'" '+
-                ' class="'+ (lineNum % 2 === 0 ? 'w2ui-even' : 'w2ui-odd') +
+                ' class="'+ (lineNum % 2 === 0 ? 'w2ui-even' : 'w2ui-odd') + ' ' + rec_class +
                     (isRowSelected && this.selectType == 'row' ? ' w2ui-selected' : '') +
                     (record.w2ui && record.w2ui.editable === false ? ' w2ui-no-edit' : '') +
                     (record.w2ui && record.w2ui.expanded === true ? ' w2ui-expanded' : '') + '" ' +
@@ -12920,6 +12921,7 @@ var w2prompt = function (label, title, callBack) {
                 var text = tab.text;
                 if (typeof text == 'function') text = text.call(this, tab);
                 if (text == null) text = '';
+                text = w2utils.lang(text);
 
                 var jq_el    = $(this.box).find('#tabs_'+ this.name +'_tab_'+ w2utils.escapeId(tab.id));
                 var closable = '';
@@ -13810,6 +13812,7 @@ var w2prompt = function (label, title, callBack) {
                     html += '<table cellpadding="0" cellspacing="0" '+
                             '       class="w2ui-button '+ (item.checked ? 'checked' : '') +'" '+
                             '       onclick     = "var el=w2ui[\''+ this.name + '\']; if (el) el.click(\''+ item.id +'\', event);" '+
+                            '       ' + (item.tooltip ? 'title="'+ w2utils.lang(item.tooltip) +'"' : '') +
                             '       onmouseover = "' + (!item.disabled ? "jQuery(this).addClass('over'); w2ui['"+ this.name +"'].tooltipShow('"+ item.id +"', event);" : "") + '"'+
                             '       onmouseout  = "' + (!item.disabled ? "jQuery(this).removeClass('over').removeClass('down'); w2ui['"+ this.name +"'].tooltipHide('"+ item.id +"', event);" : "") + '"'+
                             '       onmousedown = "' + (!item.disabled ? "jQuery(this).addClass('down');" : "") + '"'+

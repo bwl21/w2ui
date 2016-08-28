@@ -270,6 +270,7 @@
                 var text = tab.text;
                 if (typeof text == 'function') text = text.call(this, tab);
                 if (text == null) text = '';
+                text = w2utils.lang(text);
 
                 var jq_el    = $(this.box).find('#tabs_'+ this.name +'_tab_'+ w2utils.escapeId(tab.id));
                 var closable = '';
